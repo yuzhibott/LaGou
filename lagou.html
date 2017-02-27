@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica;
+			background: #f8f9fc;			
+		}
+		.i_error {
+			position: relative;
+			/*width: 654px;*/
+			width: 34.0625%;
+			/*height: 467px;*/
+			margin: 67px auto 0;	
+			/*background: url(./blocked_404.png) 0 0 no-repeat;*/
+		}
+		.i_logo {
+			position: absolute;
+			/*top: 116px;*/
+			top: 24.8394%;
+			/*left: 68px;*/
+			left: 9.785933%;
+			/*width: 110px;*/
+			width: 16.819572%;
+			/*height: 41px;*/
+			/*background: url(./lagou_logo.png) 0 0 no-repeat;*/
+		}
+		.tip {
+			margin-top: 49px;
+			font-size: q8px;
+			line-height: 20px;
+			text-align: center;
+			color: #333;
+		}
+		.msg {
+			margin-top: 15px;
+			text-align: center;
+			font-size: 16px;
+			line-height: 16px;
+			color: #777;
+		}
+		.qq {
+			margin-top: 15px;
+			font-size: 18px;
+			text-align: center;
+		}
+		.qq a {
+			display: inline-block;
+			width: 100px;
+			height: 30px;
+			border-radius: 2px;
+			line-height: 30px;
+			text-decoration: none;
+			color: #fff;
+			background: #00b38a;
+		}
+	</style>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+</head>
+<body>
+	<div class="i_error">
+		<img src="./blocked_404.png" alt="404" width="100%">
+		<div class="i_logo"><img src="./lagou_logo.png" alt="logo" width="100%"></div>
+	</div>	
+	<div class="tip">近期我们监控到您所用的IP地址出现异常，您的IP地址是：<span id="ip"></span></div>
+	<p class="tip">临时将此IP地址进行安全保护，但可能导致您无法正常登陆。</p>
+	<p class="msg">如有问题，请发送邮件至gogo@lagou.com。带来不便，敬请谅解，谢谢！</p>
+
+	<p class="qq"><a id="onlineService" href="javascript:void(0);">在线交流</a></p>
+	
+	<script type="text/javascript">
+	   // jQuery.ajax({
+	   //     url: 'http://wpa.b.qq.com/cgi/wpa.php',
+	   //     dataType: 'script',
+	   //     cache: true
+	   // }).done(function() {
+	   //     BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800056379, selector: 'onlineService'});
+	   // });
+	    function getQueryString(name){
+			    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+			    var r = window.location.search.substr(1).match(reg);
+			    if(r!=null){
+			     	return unescape(r[2]); 
+			    }
+			    return "";
+			}
+			document.getElementById("ip").innerHTML = encodeURI(getQueryString("ip"));
+	</script>
+	<script >
+	$(document).ready(function () {
+    var selector = '#webchat7moor';
+    if ($(selector).length) {
+        return;
+    }
+    var jqIframe = $('<iframe>', {
+        id: selector.slice(1),
+        src: '//' + (window.GLOBAL_CDN_DOMAIN || 'www.lgstatic.com') + '/third-parties/webchat7moor/main_59be2f6.html',
+        style: 'margin:0;'
+             + 'padding:0;'
+             + 'width:320px;'
+             + 'height:500px;'
+             + 'border-width:0;'
+             + 'border-radius: 3px;'
+             + 'transition: height 0.5s ease-out;'
+             + 'z-index:-99999;'
+             + 'display: none;'
+             + 'bottom:0;'
+             + 'right:0;'
+             + 'position:fixed;'
+    });
+    $(document.body).append(jqIframe);
+    var child = jqIframe[0].contentWindow;
+    var target = window.location.protocol + '//' + (window.GLOBAL_CDN_DOMAIN || 'www.lgstatic.com');
+    $('#onlineService, #feedback-icon').on('click', function (e) {
+        jqIframe.css('z-index', 99999).show();
+        child.postMessage('{"code":1,"message":"open webchat plugin"}', target);
+    });
+    $(window).on('message', function (e) {
+        var origin = e.origin || e.originalEvent.origin;
+        if (origin.indexOf(target) !== 0) {
+            return;
+        }
+        var data = e.data || e.originalEvent.data;
+        if (data.code === 2 && typeof data.css !== 'undefined') {
+            jqIframe.css(data.css);
+        } else {
+            jqIframe.css('z-index', -99999).hide();
+        }
+    });
+});
+	</script>
+</body>
+</html>
